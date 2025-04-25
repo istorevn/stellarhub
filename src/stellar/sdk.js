@@ -263,11 +263,11 @@ export function getKeypairFromInput(input) {
 }
 
 export function generateNewKeypair() {
-    const mnemonic = bip39.generateMnemonic(256);
-    const seed = bip39.mnemonicToSeedSync(mnemonic);
-    const {key} = derivePath("m/44'/148'/0'", seed);
-    const keypair = Keypair.fromRawEd25519Seed(key);
-    return {secret: keypair.secret(), publicKey: keypair.publicKey(), mnemonic};
+    // const mnemonic = bip39.generateMnemonic(256);
+    // const seed = bip39.mnemonicToSeedSync(mnemonic);
+    // const {key} = derivePath("m/44'/148'/0'", seed);
+    const keypair = Keypair.random();
+    return {secret: keypair.secret(), publicKey: keypair.publicKey()};
 }
 
 

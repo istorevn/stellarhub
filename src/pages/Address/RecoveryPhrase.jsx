@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function RecoveryPhrase() {
     const location = useLocation();
     const navigate = useNavigate();
-    const mnemonic = location.state?.mnemonic;
+    const mnemonic = location.state?.secret;
 
     const handleConfirm = () => {
         navigate("/"); // Go back to Home

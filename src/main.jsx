@@ -4,7 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import {ToastProvider} from "./components/ToastProvider.jsx";
 import {AuthProvider} from "./contexts/AuthContext.jsx";
-import { Buffer } from 'buffer'
+import Buffer from 'buffer/'
 import process from 'process'
 
 window.Buffer = Buffer
