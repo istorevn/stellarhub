@@ -13,20 +13,26 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      stream: 'stream-browserify',
+      crypto: 'crypto-browserify',
       buffer: 'buffer',
+      process: 'process/browser',
+      assert: 'assert',
+      util: 'util',
     },
   },
   optimizeDeps: {
-    include: ['buffer'],
+    include: ['buffer', 'process', 'crypto-browserify'],
     esbuildOptions: {
       define: {
         global: 'globalThis',
       },
       plugins: [
+        NodeModulesPolyfillPlugin(),
         NodeGlobalsPolyfillPlugin({
+          process: true,
           buffer: true,
         }),
-        NodeModulesPolyfillPlugin(),
       ],
     },
   },
