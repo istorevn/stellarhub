@@ -8,7 +8,6 @@ import {
     Memo,
     Transaction
 } from '@stellar/stellar-sdk';
-import * as bip39 from "bip39";
 import {derivePath} from "ed25519-hd-key";
 import {
     getCachedIcon,
@@ -16,7 +15,7 @@ import {
     getSecretKey, cacheAssetMeta, getCachedAssetMeta
 } from "../utils/storage";
 import {popularTokens} from "../constant/popularToken.js";
-import { mnemonicToSeedSync, generateMnemonic } from '@scure/bip39'
+import {mnemonicToSeedSync, generateMnemonic, validateMnemonic} from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
 
 export const NETWORK_KEY = "stellar-network";
@@ -252,15 +251,17 @@ function getAssetParams(asset) {
 
 export function getKeypairFromInput(input) {
     const trimmed = input.trim();
+
     if (trimmed.startsWith("S") && trimmed.length === 56) {
         return {keypair: Keypair.fromSecret(trimmed), type: "secret"};
     }
-    if (bip39.validateMnemonic(trimmed)) {
-        const seed = bip39.mnemonicToSeedSync(trimmed);
+    if (validateMnemonic(trimmed)) {
+        const seed = mnemonicToSeedSync(trimmed, wordlist);
         const {key} = derivePath("m/44'/148'/0'", seed);
         const kp = Keypair.fromRawEd25519Seed(key);
         return {keypair: kp, type: "mnemonic"};
     }
+
     throw new Error("Invalid secret key or 24-word phrase");
 }
 
