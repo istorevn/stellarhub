@@ -17,6 +17,7 @@ import {
 import {popularTokens} from "../constant/popularToken.js";
 import {mnemonicToSeedSync, generateMnemonic, validateMnemonic} from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
+import nacl from "tweetnacl";
 
 export const NETWORK_KEY = "stellar-network";
 export const DEFAULT_NETWORK = "public";
@@ -268,7 +269,8 @@ export function getKeypairFromInput(input) {
 export function generateNewKeypair() {
     const mnemonic = generateMnemonic(wordlist, 256)
     const seed = mnemonicToSeedSync(mnemonic)
-    const { key } = derivePath("m/44'/148'/0'", seed)
+    // const { key } = derivePath("m/44'/148'/0'", seed)
+    const key = nacl.sign.keyPair.fromSeed(seed)
     const keypair = Keypair.fromRawEd25519Seed(key);
     return {secret: keypair.secret(), publicKey: keypair.publicKey(), mnemonic};
 }
