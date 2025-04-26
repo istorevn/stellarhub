@@ -270,8 +270,9 @@ export function generateNewKeypair() {
     const mnemonic = generateMnemonic(wordlist, 256)
     const seed = mnemonicToSeedSync(mnemonic)
     // const { key } = derivePath("m/44'/148'/0'", seed)
-    const key = nacl.sign.keyPair.fromSeed(seed)
-    const keypair = Keypair.fromRawEd25519Seed(key);
+    const naclKeypair  = nacl.sign.keyPair.fromSeed(seed.slice(0, 32))
+    const rawPrivateKey = naclKeypair.secretKey.slice(0, 32)
+    const keypair = Keypair.fromRawEd25519Seed(rawPrivateKey);
     return {secret: keypair.secret(), publicKey: keypair.publicKey(), mnemonic};
 }
 
