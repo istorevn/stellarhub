@@ -16,6 +16,8 @@ import {
     getSecretKey, cacheAssetMeta, getCachedAssetMeta
 } from "../utils/storage";
 import {popularTokens} from "../constant/popularToken.js";
+import { mnemonicToSeedSync, generateMnemonic } from '@scure/bip39'
+import { wordlist } from '@scure/bip39/wordlists/english'
 
 export const NETWORK_KEY = "stellar-network";
 export const DEFAULT_NETWORK = "public";
@@ -263,11 +265,11 @@ export function getKeypairFromInput(input) {
 }
 
 export function generateNewKeypair() {
-    // const mnemonic = bip39.generateMnemonic(256);
-    // const seed = bip39.mnemonicToSeedSync(mnemonic);
-    // const {key} = derivePath("m/44'/148'/0'", seed);
-    const keypair = Keypair.random();
-    return {secret: keypair.secret(), publicKey: keypair.publicKey()};
+    const mnemonic = generateMnemonic(wordlist, 256)
+    const seed = mnemonicToSeedSync(mnemonic)
+    const { key } = derivePath("m/44'/148'/0'", seed)
+    const keypair = Keypair.fromRawEd25519Seed(key);
+    return {secret: keypair.secret(), publicKey: keypair.publicKey(), mnemonic};
 }
 
 
