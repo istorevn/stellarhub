@@ -10,9 +10,9 @@ export default function CreateAddress() {
 
     const handleCreate = () => {
         // Generate keypair & mnemonic, then add to storage and go to recovery screen
-        const {secret} = generateNewKeypair();
+        const {secret,mnemonic} = generateNewKeypair();
         addAddress(secret, name || `Account ${addresses.length + 1}`);
-        navigate("/recovery", {state: {secret}});
+        navigate("/recovery", {state: {mnemonic}});
     };
 
     return (
