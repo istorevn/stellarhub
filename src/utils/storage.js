@@ -1,19 +1,22 @@
 import CryptoJS from "crypto-js";
-
-const ADDRESSES_KEY = "addresses";
-const CURRENT_KEY = "currentAddress";
-const SECRET_KEY = "secrets";
-const AES_KEY = "stellar-wallet-123";
-
-export function encryptSecret(secret) {
-    return CryptoJS.AES.encrypt(secret, AES_KEY).toString();
+const UID = 'uid'
+export function encryptSecret(userId, secret) {
+    console.log('encryptSecret',userId, secret)
+    return CryptoJS.AES.encrypt(secret, userId).toString();
 }
 
-export function decryptSecret(cipher) {
+export function decryptSecret(userId,cipher) {
 
     if(!cipher) return null;
-    const bytes = CryptoJS.AES.decrypt(cipher, AES_KEY);
+    const bytes = CryptoJS.AES.decrypt(cipher, userId);
     return bytes.toString(CryptoJS.enc.Utf8);
+}
+export function getUid() {
+    return localStorage.getItem(UID);
+}
+
+export function setUid(uid) {
+    return localStorage.setItem(UID, uid);
 }
 
 export function getAddresses(userId) {
@@ -34,14 +37,6 @@ export function getCurrentAddress(userId) {
 
 export function setCurrentAddress(userId, pub) {
     localStorage.setItem(getCurrentKey(userId), pub);
-}
-
-
-export function saveSecretKey(publicKey, secret) {
-    const json = localStorage.getItem(SECRET_KEY);
-    const map = json ? JSON.parse(json) : {};
-    map[publicKey] = secret;
-    localStorage.setItem(SECRET_KEY, JSON.stringify(map));
 }
 
 export function getSecretKey(userId, pub) {
@@ -68,7 +63,7 @@ export function getAddressMap(userId) {
         const {secretKey, name} = parsed[pub];
         const decryptKey = async () => {
 
-            return await decryptSecret(secretKey);
+            return await decryptSecret(userId, secretKey);
         };
         result[pub] = {
             publicKey: pub,
@@ -91,7 +86,7 @@ export function addAddress(userId, pub, secret, name = "Ví mới") {
 
     current[pub] = {
         publicKey: pub,
-        secretKey: encryptSecret(secret),
+        secretKey: encryptSecret(userId, secret),
         name,
     };
     localStorage.setItem(getWalletKey(userId), JSON.stringify(current));

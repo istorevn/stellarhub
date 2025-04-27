@@ -7,7 +7,6 @@ export default function CreateAddress() {
     const {addAddress, addresses} = useAddressContext();
     const [name, setName] = useState("");
     const navigate = useNavigate();
-
     const handleCreate = () => {
         // Generate keypair & mnemonic, then add to storage and go to recovery screen
         const {secret,mnemonic} = generateNewKeypair();
