@@ -21,9 +21,6 @@ export default defineConfig({
       util: 'util',
     },
   },
-  define: {
-    'process.env': {}
-  },
   optimizeDeps: {
     include: ['buffer', 'process', 'crypto-browserify'],
     esbuildOptions: {
@@ -38,5 +35,16 @@ export default defineConfig({
         }),
       ],
     },
+  },
+  define: {
+    'process.env': {},
+    global: 'globalThis',
+  },
+  build: {
+    rollupOptions: {
+      plugins: [
+        rollupNodePolyFill()
+      ]
+    }
   },
 });
