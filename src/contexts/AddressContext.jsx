@@ -8,7 +8,7 @@ export const AddressContext = createContext();
 
 export function AddressProvider({ children }) {
     const { user } = useAuth();
-    const userId = user?.hash || "guest"; // fallback if not logged in
+    const userId = user?.id || ""; // fallback if not logged in
 
     const [addresses, setAddresses] = useState([]); // array of publicKeys
     const [currentAddress, setCurrentAddressState] = useState(null);

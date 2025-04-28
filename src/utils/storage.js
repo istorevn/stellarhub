@@ -1,8 +1,7 @@
 import CryptoJS from "crypto-js";
 const UID = 'uid'
 export function encryptSecret(userId, secret) {
-    console.log('encryptSecret',userId, secret)
-    return CryptoJS.AES.encrypt(secret, userId).toString();
+    return CryptoJS.AES.encrypt(secret, userId)?.toString();
 }
 
 export function decryptSecret(userId,cipher) {
@@ -80,8 +79,7 @@ export function getWallet(userId, pub) {
     return getAddressMap(userId)[pub] || null;
 }
 
-// Thêm ví mới
-export function addAddress(userId, pub, secret, name = "Ví mới") {
+export function addAddress(userId, pub, secret, name = "New Account") {
     const current = getAddressMap(userId);
 
     current[pub] = {
