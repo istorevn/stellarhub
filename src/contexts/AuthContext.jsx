@@ -13,6 +13,7 @@ const mockUser = {
 };
 
 function getTelegramUser(timeout = 3000) {
+    console.log('getTelegramUser env', import.meta.env.DEV)
     if (import.meta.env.DEV) {
         return mockUser;
     }
@@ -21,6 +22,8 @@ function getTelegramUser(timeout = 3000) {
 
         const check = () => {
             if (useRawInitData) {
+                console.log('getTelegramUser useRawInitData', useRawInitData)
+
                 resolve(useRawInitData?.user);
             } else if (Date.now() - start > timeout) {
                 reject(new Error("Timeout waiting for Telegram init."));
