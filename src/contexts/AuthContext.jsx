@@ -73,12 +73,12 @@ function generateHash() {
 export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
     const [ready, setReady] = useState(false);
-    const initDataUnsafe = useLaunchParams();
+    const {tgWebAppData} = useLaunchParams();
     useEffect(() => {
-        console.log('initData', initDataUnsafe)
-        if (initDataUnsafe) {
-            setUser(initDataUnsafe.user);
-            setUid(initDataUnsafe.user.hash)
+        console.log('initData', tgWebAppData)
+        if (tgWebAppData) {
+            setUser(tgWebAppData.user);
+            setUid(tgWebAppData.user.hash)
             setReady(true);
         }else{
             if (import.meta.env.DEV) {
@@ -94,7 +94,7 @@ export function AuthProvider({children}) {
             }
         }
 
-    }, [initDataUnsafe]);
+    }, [tgWebAppData]);
 
     return (
         <AuthContext.Provider value={{user}}>
