@@ -1,8 +1,7 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {createHash} from 'crypto-browserify';
-import {init,useLaunchParams } from '@telegram-apps/sdk-react';
+import { isTMA, useLaunchParams} from '@telegram-apps/sdk-react';
 import {getUid, setUid} from "../utils/storage.js";
-init();
 const mockUser = {
     id: 123456789,
     hash: 123456789,
@@ -11,55 +10,6 @@ const mockUser = {
     username: 'devuser',
     photo_url: 'https://via.placeholder.com/150',
 };
-
-function getTelegramUser(timeout = 3000) {
-    console.log('getTelegramUser env', import.meta.env.DEV)
-    if (import.meta.env.DEV) {
-        return mockUser;
-    }
-    return new Promise((resolve, reject) => {
-        const start = Date.now();
-
-        const check = () => {
-            let initData = useLaunchParams()
-            if (initData?.user) {
-                console.log('getTelegramUser useRawInitData', initData)
-
-                resolve(initData?.user);
-            } else if (Date.now() - start > timeout) {
-                reject(new Error("Timeout waiting for Telegram init."));
-            } else {
-                setTimeout(check, 100);
-            }
-        };
-
-        check();
-    });
-}
-
-export async function waitForTelegramInit() {
-
-    if (import.meta.env.DEV && !useRawInitData?.user) {
-        return mockUser;
-    }
-
-    if (typeof window === "undefined" || !window.Telegram || !window.Telegram.WebApp) {
-        throw new Error("Telegram WebApp SDK is not available.");
-    }
-
-    const useInitData = await getTelegramUser();
-    if (useInitData) {
-
-        return useInitData;
-    } else {
-        const uid = getUid();
-        if (!uid) {
-            return {user: {hash: generateHash()}};
-        } else {
-            return {user: {hash: uid}};
-        }
-    }
-}
 
 export const AuthContext = createContext();
 
@@ -73,10 +23,14 @@ function generateHash() {
 export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
     const [ready, setReady] = useState(false);
-    const initData = useLaunchParams();
+    let initData = null;
+    if(isTMA()){
+        initData = useLaunchParams();
+    }
     console.log('useLaunchParams', initData)
+
     useEffect(() => {
-        console.log('initData', initData.tgWebAppData)
+        console.log('initData', initData?.tgWebAppData)
         if (initData?.tgWebAppData) {
             setUser(initData.tgWebAppData.user);
             setUid(initData.tgWebAppData.hash)
