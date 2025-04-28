@@ -12,30 +12,47 @@ const mockUser = {
     photo_url: 'https://via.placeholder.com/150',
 };
 
-function getTelegramUser() {
-    // if (import.meta.env.DEV && !useRawInitData?.user) {
-    //     return mockUser;
-    // }
-    return useRawInitData?.user || null;
+function getTelegramUser(timeout = 3000) {
+
+    return new Promise((resolve, reject) => {
+        const start = Date.now();
+
+        const check = () => {
+            if (window.Telegram?.WebApp?.initDataUnsafe) {
+                resolve(window.Telegram.WebApp.initDataUnsafe);
+            } else if (Date.now() - start > timeout) {
+                reject(new Error("Timeout waiting for Telegram init."));
+            } else {
+                setTimeout(check, 100);
+            }
+        };
+
+        check();
+    });
 }
 
-export function waitForTelegramInit() {
-    return new Promise((resolve) => {
-        // init();
-        const useInitData = getTelegramUser();
-        if (useInitData) {
+export async function waitForTelegramInit() {
 
-            resolve(useInitData);
+    if (import.meta.env.DEV && !useRawInitData?.user) {
+        return mockUser;
+    }
+
+    if (typeof window === "undefined" || !window.Telegram || !window.Telegram.WebApp) {
+        throw new Error("Telegram WebApp SDK is not available.");
+    }
+
+    const useInitData = await getTelegramUser();
+    if (useInitData) {
+
+        return useInitData;
+    } else {
+        const uid = getUid();
+        if (!uid) {
+            return {user: {hash: generateHash()}};
         } else {
-            const uid = getUid();
-            if (!uid) {
-                resolve({hash: generateHash()});
-            } else {
-                resolve({hash: uid});
-            }
-
+            return {user: {hash: uid}};
         }
-    });
+    }
 }
 
 export const AuthContext = createContext();
@@ -52,16 +69,36 @@ export function AuthProvider({children}) {
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
+        if (import.meta.env.DEV) {
+            setUser(mockUser);
+        }
+        if (useRawInitData) {
+            setUser(useRawInitData?.user || null);
+        }
+    }, [useRawInitData]);
+
+    useEffect(() => {
         async function init() {
-            const userInfo = await waitForTelegramInit();
-            setUser(userInfo);
-            setReady(true);
-            setUid(userInfo.hash)
+            let userInfo;
+            if (import.meta.env.DEV) {
+                userInfo = mockUser;
+                setUser(userInfo);
+                setReady(true);
+                setUid(userInfo.hash)
+            }else{
+                if (useRawInitData) {
+                    userInfo = useRawInitData?.user || null;
+                    setUser(userInfo);
+                    setReady(true);
+                    setUid(userInfo.hash)
+                }
+            }
+
         }
 
         init();
 
-    }, []);
+    }, [useRawInitData]);
 
     return (
         <AuthContext.Provider value={{user}}>
