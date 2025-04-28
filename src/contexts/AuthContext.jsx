@@ -75,6 +75,7 @@ export function AuthProvider({children}) {
     const [ready, setReady] = useState(false);
     const initDataUnsafe = useRawInitData();
     useEffect(() => {
+        console.log('initData', initDataUnsafe)
         if (initDataUnsafe?.user) {
             setUser(initDataUnsafe.user);
             setUid(initDataUnsafe.user.hash)
