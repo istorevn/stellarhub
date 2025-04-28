@@ -13,13 +13,15 @@ const mockUser = {
 };
 
 function getTelegramUser(timeout = 3000) {
-
+    if (import.meta.env.DEV) {
+        return mockUser;
+    }
     return new Promise((resolve, reject) => {
         const start = Date.now();
 
         const check = () => {
-            if (window.Telegram?.WebApp?.initDataUnsafe) {
-                resolve(window.Telegram.WebApp.initDataUnsafe);
+            if (useRawInitData) {
+                resolve(useRawInitData?.user);
             } else if (Date.now() - start > timeout) {
                 reject(new Error("Timeout waiting for Telegram init."));
             } else {
@@ -68,32 +70,26 @@ export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
     const [ready, setReady] = useState(false);
 
-    useEffect(() => {
-        if (import.meta.env.DEV) {
-            setUser(mockUser);
-        }
-        if (useRawInitData) {
-            setUser(useRawInitData?.user || null);
-        }
-    }, [useRawInitData]);
+    // useEffect(() => {
+    //     if (import.meta.env.DEV) {
+    //         setUser(mockUser);
+    //     }
+    //     if (useRawInitData) {
+    //         setUser(useRawInitData?.user || null);
+    //     }
+    // }, [useRawInitData]);
 
     useEffect(() => {
         async function init() {
-            let userInfo;
-            if (import.meta.env.DEV) {
-                userInfo = mockUser;
+            try {
+                const userInfo = await getTelegramUser();
                 setUser(userInfo);
                 setReady(true);
                 setUid(userInfo.hash)
-            }else{
-                if (useRawInitData) {
-                    userInfo = useRawInitData?.user || null;
-                    setUser(userInfo);
-                    setReady(true);
-                    setUid(userInfo.hash)
-                }
-            }
+            }catch (err){
 
+                console.log('err', err)
+            }
         }
 
         init();
