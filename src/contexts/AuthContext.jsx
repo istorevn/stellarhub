@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {createHash} from 'crypto-browserify';
-import {init,initDataUser } from '@telegram-apps/sdk-react';
+import {init,useLaunchParams } from '@telegram-apps/sdk-react';
 import {getUid, setUid} from "../utils/storage.js";
 init();
 const mockUser = {
@@ -21,9 +21,9 @@ function getTelegramUser(timeout = 3000) {
         const start = Date.now();
 
         const check = () => {
-            let initData = initDataUser()
-            if (initData) {
-                console.log('getTelegramUser initDataUser', initData)
+            let initData = useLaunchParams()
+            if (initData?.user) {
+                console.log('getTelegramUser useRawInitData', initData)
 
                 resolve(initData?.user);
             } else if (Date.now() - start > timeout) {
@@ -39,7 +39,7 @@ function getTelegramUser(timeout = 3000) {
 
 export async function waitForTelegramInit() {
 
-    if (import.meta.env.DEV && !initDataUser?.user) {
+    if (import.meta.env.DEV && !useRawInitData?.user) {
         return mockUser;
     }
 
@@ -73,10 +73,10 @@ function generateHash() {
 export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
     const [ready, setReady] = useState(false);
-    const initDataUnsafe = initDataUser();
+    const initDataUnsafe = useLaunchParams();
     useEffect(() => {
         console.log('initData', initDataUnsafe)
-        if (initDataUnsafe?.user) {
+        if (initDataUnsafe) {
             setUser(initDataUnsafe.user);
             setUid(initDataUnsafe.user.hash)
             setReady(true);
