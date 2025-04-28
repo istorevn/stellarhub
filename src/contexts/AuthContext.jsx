@@ -1,8 +1,8 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {createHash} from 'crypto-browserify';
-import {useRawInitData} from '@telegram-apps/sdk-react';
+import {init,useRawInitData } from '@telegram-apps/sdk-react';
 import {getUid, setUid} from "../utils/storage.js";
-
+init();
 const mockUser = {
     id: 123456789,
     hash: 123456789,
@@ -21,10 +21,11 @@ function getTelegramUser(timeout = 3000) {
         const start = Date.now();
 
         const check = () => {
-            if (useRawInitData) {
-                console.log('getTelegramUser useRawInitData', useRawInitData)
+            let initData = useRawInitData()
+            if (initData) {
+                console.log('getTelegramUser useRawInitData', initData)
 
-                resolve(useRawInitData?.user);
+                resolve(initData?.user);
             } else if (Date.now() - start > timeout) {
                 reject(new Error("Timeout waiting for Telegram init."));
             } else {
@@ -72,32 +73,27 @@ function generateHash() {
 export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
     const [ready, setReady] = useState(false);
-
-    // useEffect(() => {
-    //     if (import.meta.env.DEV) {
-    //         setUser(mockUser);
-    //     }
-    //     if (useRawInitData) {
-    //         setUser(useRawInitData?.user || null);
-    //     }
-    // }, [useRawInitData]);
-
+    const initDataUnsafe = useRawInitData();
     useEffect(() => {
-        async function init() {
-            try {
-                const userInfo = await getTelegramUser();
-                setUser(userInfo);
-                setReady(true);
-                setUid(userInfo.hash)
-            }catch (err){
+        if (initDataUnsafe?.user) {
+            setUser(initDataUnsafe.user);
+            setUid(initDataUnsafe.user.hash)
+            setReady(true);
+        }else{
+            if (import.meta.env.DEV) {
+                setUser(mockUser);
 
-                console.log('err', err)
+                const uid = getUid();
+                if (!uid) {
+                    setUid(generateHash())
+                } else {
+                    setUid(generateHash(uid))
+                }
+                setReady(true);
             }
         }
 
-        init();
-
-    }, [useRawInitData]);
+    }, [initDataUnsafe]);
 
     return (
         <AuthContext.Provider value={{user}}>
