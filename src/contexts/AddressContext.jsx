@@ -10,6 +10,7 @@ export function AddressProvider({ children }) {
     const { user } = useAuth();
     const userId = user?.id || ""; // fallback if not logged in
 
+    console.log('userId', userId)
     const [addresses, setAddresses] = useState([]); // array of publicKeys
     const [currentAddress, setCurrentAddressState] = useState(null);
     const [addressMap, setAddressMap] = useState({}); // publicKey => { publicKey, secretKey, name }
