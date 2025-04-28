@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {createHash} from 'crypto-browserify';
-import {useRawInitData} from '@telegram-apps/sdk-react';
+// import {useRawInitData} from '@telegram-apps/sdk-react';
 import {getUid, setUid} from "../utils/storage.js";
 
 const mockUser = {
@@ -13,10 +13,10 @@ const mockUser = {
 };
 
 function getTelegramUser() {
-    // if (import.meta.env.DEV && !useRawInitData?.user) {
-    //     return mockUser;
-    // }
-    return useRawInitData?.user || null;
+    if (import.meta.env.DEV && !useRawInitData?.user) {
+        return mockUser;
+    }
+    // return useRawInitData?.user || null;
 }
 
 export function waitForTelegramInit() {
