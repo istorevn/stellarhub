@@ -13,9 +13,9 @@ const mockUser = {
 };
 
 function getTelegramUser() {
-    if (import.meta.env.DEV && !useRawInitData?.user) {
-        return mockUser;
-    }
+    // if (import.meta.env.DEV && !useRawInitData?.user) {
+    //     return mockUser;
+    // }
     return useRawInitData?.user || null;
 }
 
