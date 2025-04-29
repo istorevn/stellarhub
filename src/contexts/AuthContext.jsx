@@ -3,7 +3,7 @@ import {createHash} from 'crypto-browserify';
 import { isTMA, useLaunchParams} from '@telegram-apps/sdk-react';
 import {getUid, setUid} from "../utils/storage.js";
 const mockUser = {
-    id: '7cd3f806d3dd71b1a4921f6163b3f66839f41ac43746bc173728e248ab5'.toString(),
+    id: '123456789'.toString(),
     hash: generateHash().toString(),
     first_name: 'Dev',
     last_name: 'User',
