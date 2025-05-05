@@ -41,7 +41,7 @@ export default function Swap() {
 
             if (result) {
                 setReceiveAmount(result.destinationAmount);
-                setSwapRate(result.rate);
+                setSwapRate(result.rate.toFixed(6));
                 const minReceive = result.destinationAmount * (1 - spread / 100);
                 setMinToReceive(minReceive.toFixed(6));
             } else {
@@ -148,9 +148,8 @@ export default function Swap() {
             <div className="grid grid-cols-2 gap-2 my-2 text-sm">
                 <div className="text-gray-500 text-start">
                     Swap Rate:
-                    {loadingRate && <ClipLoader size={16} color="#3b82f6"/>}
                 </div>
-                <div className="font-mono text-end text-blue-600">{swapRate.toFixed(6)}</div>
+                <div className="font-mono text-end text-blue-600">{loadingRate ? <ClipLoader size={16} color="#3b82f6"/> : swapRate}</div>
             </div>
 
             {/* Minimum to Receive */}

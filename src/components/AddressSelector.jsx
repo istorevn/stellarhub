@@ -58,7 +58,7 @@ export default function AddressSelector() {
                         setVisible(false)
                     }}
                              className={'px-4  h-2/3 pt-2 relative'}
-                             header={<div className={'text-center mt-3 text-blue-500'}>
+                             header={<div className={'text-center mt-3 text-blue-600'}>
                                  {shortAddr(currentAddress, 6)}
                              </div>}
                     >
@@ -105,7 +105,7 @@ export default function AddressSelector() {
                         </div>
                     </Sidebar>
                     <button onClick={() => setVisible(true)} className={'ml-4'}>
-                        <Bars4Icon className={'size-4'}/>
+                        <Bars4Icon className={'size-4 text-blue-600'}/>
                     </button>
                 </div>
 
@@ -138,16 +138,16 @@ export default function AddressSelector() {
                                 className="border-t border-gray-300 mt-1 pt-3 w-full ">
                                 <div
                                     onClick={() => handleSwitchNetwork("public")}
-                                    className={`px-3 py-2 text-gray-600 cursor-pointer  ${
-                                        network === "public" && "text-sky-700"
+                                    className={`px-3 py-2  cursor-pointer  ${
+                                        network === "public" && "text-blue-700"
                                     }`}
                                 >
                                     Public
                                 </div>
                                 <div
                                     onClick={() => handleSwitchNetwork("testnet")}
-                                    className={`px-3 py-2 text-gray-600 cursor-pointer  ${
-                                        network === "testnet" && "text-sky-700"
+                                    className={`px-3 py-2  cursor-pointer  ${
+                                        network === "testnet" && "text-blue-700"
                                     }`}
                                 >
                                     Testnet
@@ -155,7 +155,7 @@ export default function AddressSelector() {
                             </div>
                         </Sidebar>
                         <div onClick={() => setVisibleNetwork(true)}
-                             className={" w-full flex font-semibold text-xs pr-3  text-sky-600 "}>
+                             className={" w-full flex font-semibold text-xs pr-3  text-blue-600 "}>
                             <span className={'grow'}>
                             {network === "public" ? "Public network" : "Test network"}
                             </span>
