@@ -41,6 +41,16 @@ export default defineConfig({
     global: 'globalThis',
   },
   build: {
+    terserOptions: {
+      compress: {
+        drop_console: false,
+        drop_debugger: false,
+      },
+      format: {
+        comments: false
+      },
+    },
+    sourcemap: true,
     rollupOptions: {
       plugins: [
         rollupNodePolyFill()
