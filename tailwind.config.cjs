@@ -1,4 +1,3 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 import colors from 'tailwindcss/colors';
 
@@ -11,11 +10,6 @@ export default {
 
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-      },
-    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',

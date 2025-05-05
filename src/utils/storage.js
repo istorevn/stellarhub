@@ -7,7 +7,7 @@ export function encryptSecret(userId, secret) {
 export function decryptSecret(userId,cipher) {
 
     if(!cipher) return null;
-    const bytes = CryptoJS.AES.decrypt(cipher, userId);
+    const bytes = CryptoJS.AES.decrypt(cipher, userId.toString());
     return bytes.toString(CryptoJS.enc.Utf8);
 }
 export function getUid() {
