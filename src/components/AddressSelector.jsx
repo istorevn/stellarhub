@@ -49,7 +49,7 @@ export default function AddressSelector() {
         setVisible(false)
     };
     return (
-        <div className="mb-2 border-b border-gray-200 shadow text-sm py-2">
+        <div className="mb-1 border-b border-gray-200 shadow text-sm py-1">
 
             <div className="grid grid-cols-3 items-center mb-2">
                 <div className={'grid text-left'}>
@@ -65,37 +65,37 @@ export default function AddressSelector() {
 
                         {currentAddress &&
                             <Link to="/setting" onClick={() => setVisible(false)}
-                                className={"flex w-full px-2 my-2 text-sm cursor-pointer text-gray-600 border-t border-gray-300 pt-3 content-end"}>
-                                <Cog6ToothIcon className={'size-3 mt-1 mr-1'}/>
+                                className={"flex w-full px-2 my-2 cursor-pointer text-gray-600 border-t border-gray-300 pt-3 content-end"}>
+                                <Cog6ToothIcon className={'size-4 mt-1 mr-1'}/>
                                 Setting this account
                             </Link>
                         }
                         {currentAddress &&
                             <a href={accountHref(currentAddress)}
                                target={'_blank'}
-                               className={"w-full flex px-2 my-2 text-sm cursor-pointer  text-gray-600"}>
-                                <MagnifyingGlassIcon className={'size-3 mt-1 mr-1'}/>
+                               className={"w-full flex px-2 my-2 cursor-pointer  text-gray-600"}>
+                                <MagnifyingGlassIcon className={'size-4 mt-1 mr-1'}/>
                                 View on StellarExpert</a>
                         }
 
                         <Link to="/newAddress"  onClick={() => setVisible(false)}
-                              className={"flex px-2 pb-3 w-full my-2 text-sm cursor-pointer text-gray-600 border-b border-gray-300"}>
-                            <PlusIcon className={'size-3 mt-1 mr-1'}/> Create/import new wallet
+                              className={"flex px-2 pb-3 w-full my-2 cursor-pointer text-gray-600 border-b border-gray-300"}>
+                            <PlusIcon className={'size-4 mt-1 mr-1'}/> Create/import new wallet
                         </Link>
 
                         {addresses.filter((addr) => addr != currentAddress).map((addr) => (
                             <div onClick={() => handleSelectAddr(addr)}
                                  key={addr}
-                                 className="px-2 py-1 my-1 text-sm cursor-pointer text-gray-600 flex "
+                                 className="px-2 py-1 my-1 cursor-pointer text-gray-600 flex "
                             >
-                                <ChevronRightIcon className={'size-3 mt-1 mr-1'} /> {addressMap[addr]?.name || addr} ({shortAddr(addr)})
+                                <ChevronRightIcon className={'size-4 mt-1 mr-1'} /> {addressMap[addr]?.name || addr} ({shortAddr(addr)})
                             </div>
                         ))}
 
                         <div className={'flex mt-3 border-t border-gray-300 justify-between'}>
                                 <span
-                                    className={"py-1 px-3 my-3 text-sm cursor-pointer text-gray-600"}>2025 ©&nbsp;StellarHub </span>
-                            <Link to="/newAddress" className={"py-1 px-3 my-3 text-sm cursor-pointer "}>
+                                    className={"py-1 px-3 my-3 cursor-pointer text-gray-600"}>2025 ©&nbsp;StellarHub </span>
+                            <Link to="/newAddress" className={"py-1 px-3 my-3 cursor-pointer "}>
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
                                      viewBox="0 0 24 24">
                                     <path
@@ -115,7 +115,7 @@ export default function AddressSelector() {
                             ? addressMap[currentAddress]?.name || currentAddress
                             : "Select wallet"}
                     </div>
-                    <div className={'flex justify-center item-center text-gray-600 network'} onClick={handleCopyAddr}
+                    <div className={'flex text-xs justify-center item-center text-gray-600 network'} onClick={handleCopyAddr}
                     >
                         {currentAddress
                             ? `${shortAddr(addressMap[currentAddress]?.publicKey, 4)}`
@@ -127,21 +127,15 @@ export default function AddressSelector() {
 
                 {/* Actions: Add wallet + Network switch */}
                 <div className="w-full">
-                    <Link
-                        to="/"
-                        className="block text-end font-bold text-blue-600  px-4 "
-                    >
-                        StellarHub
-                    </Link>
 
                     {/* Network switch dropdown */}
                     <div className="grid grid-auto-rows w-full justify-end-safe">
                         <Sidebar position="top" visible={visibleNetwork} onHide={() => setVisibleNetwork(false)}
                                  className={'px-4 text-center'}
-                                 header={<div className={'text-center mt-3'}>Select Network</div>}
+                                 header={<div className={'text-center mt-3 '}>Select Network</div>}
                         >
                             <div
-                                className=" mt-0 w-full ">
+                                className="border-t border-gray-300 mt-1 pt-3 w-full ">
                                 <div
                                     onClick={() => handleSwitchNetwork("public")}
                                     className={`px-3 py-2 text-gray-600 cursor-pointer  ${
@@ -161,7 +155,7 @@ export default function AddressSelector() {
                             </div>
                         </Sidebar>
                         <div onClick={() => setVisibleNetwork(true)}
-                             className={" w-full flex text-xs pr-3  text-sky-600 "}>
+                             className={" w-full flex font-semibold text-xs pr-3  text-sky-600 "}>
                             <span className={'grow'}>
                             {network === "public" ? "Public network" : "Test network"}
                             </span>
