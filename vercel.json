@@ -1,8 +1,0 @@
-{
-  "build": {
-    "skipBuildStep": true
-  },
-  "routes": [
-    { "src": "/(.*)", "dest": "/dist/$1" }
-  ]
-}

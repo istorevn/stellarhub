@@ -1,5 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {createHash} from 'crypto-browserify';
+import { sha256Hex } from '../utils/hash';
+
 import { isTMA, useLaunchParams} from '@telegram-apps/sdk-react';
 import {getUid, setUid} from "../utils/storage.js";
 const mockUser = {
@@ -17,7 +18,7 @@ function generateHash() {
     const userAgent = navigator.userAgent || '';
     const randomSeed = Date.now().toString() + Math.random().toString();
     const input = userAgent + randomSeed;
-    return createHash('sha256').update(input).digest('hex');
+    return sha256Hex(input);
 }
 
 export function AuthProvider({children}) {
