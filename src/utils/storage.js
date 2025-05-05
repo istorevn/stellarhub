@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js";
 const UID = 'uid'
 export function encryptSecret(userId, secret) {
-    return CryptoJS.AES.encrypt(secret.toString(), userId.toString())?.toString();
+    return CryptoJS.AES.encrypt(secret, userId)?.toString();
 }
 
 export function decryptSecret(userId,cipher) {
