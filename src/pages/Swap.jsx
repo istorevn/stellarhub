@@ -4,8 +4,6 @@ import SwapAmountInput from "../components/SwapAmountInput";
 import {useToast} from "../components/ToastProvider.jsx";
 import {ClipLoader} from "react-spinners";
 import {useAddressContext} from "../contexts/AddressContext.jsx";
-import {Field, Label, Radio, RadioGroup} from "@headlessui/react";
-
 export default function Swap() {
     const {showToast} = useToast();
     const {currentAddress, getSecretKey} = useAddressContext();
@@ -26,8 +24,6 @@ export default function Swap() {
 
     useEffect(() => {
         if (sendAmount && receiveAmount) {
-            const rate = parseFloat(sendAmount) / parseFloat(receiveAmount);
-            setSwapRate(rate);
             const minReceive = parseFloat(receiveAmount) * (1 - spread / 100);
             setMinToReceive(minReceive.toFixed(6));
         }
@@ -104,21 +100,30 @@ export default function Swap() {
             />
 
             {/* Spread Selection */}
-            <div className="py-2 mb-4 flex text-sm w-full max-w-full">
+            <div className="py-2 mb-4 flex text-sm w-full max-w-full ">
                 <p className="text-gray-600 mr-2 ">Spread:</p>
-                <div className="grid grid-cols-2 gap-2">
-                    {["0.5%", "1.0%", "2.5%", "5%"].map((percentage) => (
-                        <label key={percentage} className="flex items-center border border-gray-200 px-2 rounded">
+                <div className="grid grid-cols-4 gap-0">
+
+                    {["0.5%", "1.0%", "2.5%", "5%"].map((percentage,idx) => (
+                        <div role="radiogroup ">
                             <input
+                                id={`s${percentage}`}
                                 type="radio"
                                 name="spread"
                                 value={percentage}
                                 checked={spread === parseFloat(percentage)}
                                 onChange={() => setSpread(parseFloat(percentage))}
-                                className="mr-2 "
+                                className="mr-2 hidden peer"
                             />
-                            {percentage}
-                        </label>
+                            <label htmlFor={`s${percentage}`} key={percentage}
+                                   className={[
+                                       'text-xs peer-checked:bg-blue-600 peer-checked:border-blue-600 peer-checked:text-white flex items-center border border-gray-200 px-2 py-1',
+                                       idx === 0 && 'rounded-l',
+                                       idx === 3 && 'rounded-r'
+                                   ].join(' ')}>
+                                {percentage}
+                            </label>
+                        </div>
                     ))}
                 </div>
             </div>

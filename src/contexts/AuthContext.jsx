@@ -3,14 +3,14 @@ import { sha256Hex } from '../utils/hash';
 
 import { isTMA, useLaunchParams} from '@telegram-apps/sdk-react';
 import {getUid, setUid} from "../utils/storage.js";
-const mockUser = {
-    id: '123456789',
-    hash: generateHash().toString(),
-    first_name: 'Dev',
-    last_name: 'User',
-    username: 'devuser',
-    photo_url: 'https://via.placeholder.com/150',
-};
+// const mockUser = {
+//     id: '123456789',
+//     hash: generateHash().toString(),
+//     first_name: 'Dev',
+//     last_name: 'User',
+//     username: 'devuser',
+//     photo_url: 'https://via.placeholder.com/150',
+// };
 
 export const AuthContext = createContext();
 
@@ -38,7 +38,7 @@ export function AuthProvider({children}) {
             setReady(true);
         }else{
             if (import.meta.env.DEV) {
-                setUser(mockUser);
+                // setUser(mockUser);
 
                 const uid = getUid();
                 if (!uid) {
