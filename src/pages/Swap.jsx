@@ -106,9 +106,9 @@ export default function Swap() {
             {/* Spread Selection */}
             <div className="py-2 mb-4 flex text-sm w-full max-w-full">
                 <p className="text-gray-600 mr-2 ">Spread:</p>
-                <div className="grid grid-cols-4 ">
+                <div className="grid grid-cols-2 gap-2">
                     {["0.5%", "1.0%", "2.5%", "5%"].map((percentage) => (
-                        <label key={percentage} className="flex items-center border border-gray-200 px-2 mx-1 rounded">
+                        <label key={percentage} className="flex items-center border border-gray-200 px-2 rounded">
                             <input
                                 type="radio"
                                 name="spread"
