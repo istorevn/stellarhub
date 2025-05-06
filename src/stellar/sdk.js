@@ -256,11 +256,13 @@ export function getKeypairFromInput(input) {
     if (trimmed.startsWith("S") && trimmed.length === 56) {
         return {keypair: Keypair.fromSecret(trimmed), type: "secret"};
     }
-    if (validateMnemonic(trimmed)) {
-        const seed = mnemonicToSeedSync(trimmed, wordlist);
-        const {key} = derivePath("m/44'/148'/0'", seed);
-        const kp = Keypair.fromRawEd25519Seed(key);
-        return {keypair: kp, type: "mnemonic"};
+    if (validateMnemonic(trimmed, wordlist)) {
+        const seed = mnemonicToSeedSync(trimmed);
+        const naclKeypair  = nacl.sign.keyPair.fromSeed(seed.slice(0, 32))
+        const rawPrivateKey = naclKeypair.secretKey.slice(0, 32)
+        const keypair = Keypair.fromRawEd25519Seed(rawPrivateKey);
+
+        return {keypair: keypair, type: "mnemonic"};
     }
 
     throw new Error("Invalid secret key or 24-word phrase");
@@ -269,7 +271,6 @@ export function getKeypairFromInput(input) {
 export function generateNewKeypair() {
     const mnemonic = generateMnemonic(wordlist, 256)
     const seed = mnemonicToSeedSync(mnemonic)
-    // const { key } = derivePath("m/44'/148'/0'", seed)
     const naclKeypair  = nacl.sign.keyPair.fromSeed(seed.slice(0, 32))
     const rawPrivateKey = naclKeypair.secretKey.slice(0, 32)
     const keypair = Keypair.fromRawEd25519Seed(rawPrivateKey);
