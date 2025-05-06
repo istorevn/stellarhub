@@ -7,7 +7,7 @@ export default function MainLayout({ children }) {
     return (
         <div className="min-h-screen h-screen flex flex-col pb-16 bg-white">
             {currentAddress && <AddressSelector /> }
-            <div className="flex-1 pb-16">{children}</div>
+            <div className="flex-1 pb-16 bg-white">{children}</div>
             {currentAddress && <BottomNav /> }
         </div>
     );
